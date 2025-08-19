@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alien Races Index - Comprehensive Reference Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            background: linear-gradient(45deg, #64ffda, #3f51b5, #9c27b0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.8;
+            margin-bottom: 20px;
+        }
+        
+        .search-container {
+            margin: 30px 0;
+            position: relative;
+        }
+        
+        #searchInput {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            font-size: 16px;
+            border: 2px solid #3f51b5;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        #searchInput:focus {
+            border-color: #64ffda;
+            box-shadow: 0 0 20px rgba(100, 255, 218, 0.3);
+        }
+        
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64ffda;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            min-width: 150px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #64ffda;
+        }
+        
+        .races-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+        
+        .race-card {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+        }
+        
+        .race-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(100, 255, 218, 0.2);
+            border-color: #64ffda;
+        }
+        
+        .race-title {
+            font-size: 1.5em;
+            color: #64ffda;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .race-origin {
+            color: #9c27b0;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+        
+        .race-description {
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .race-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .link-btn {
+            background: linear-gradient(45deg, #3f51b5, #9c27b0);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .link-btn:hover {
+            background: linear-gradient(45deg, #64ffda, #3f51b5);
+            transform: scale(1.05);
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .complete { background: #4caf50; }
+        .in-progress { background: #ff9800; }
+        .pending { background: #757575; }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(145deg, #1a1a2e, #16213e);
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 2px solid #64ffda;
+        }
+        
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 30px;
+            cursor: pointer;
+            color: #64ffda;
+        }
+        
+        @media (max-width: 768px) {
+            .races-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Alien Races Index</h1>
+            <p class="subtitle">Comprehensive Reference Guide to Extraterrestrial Species</p>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search alien races..." onkeyup="searchRaces()">
+                <span class="search-icon">🔍</span>
+            </div>
+        </header>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number">3</div>
+                <div>Races Completed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">17</div>
+                <div>In Progress</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">20</div>
+                <div>Total Races</div>
+            </div>
+        </div>
+        
+        <div class="races-grid" id="racesGrid">
+            <!-- The Greys -->
+            <div class="race-card" onclick="openModal('greys')">
+                <div class="race-title">
+                    <span class="status-indicator complete"></span>
+                    The Greys
+                </div>
+                <div class="race-origin">Origin: Zeta Reticuli Star System</div>
+                <div class="race-description">
+                    Small, humanoid beings with smooth grey skin, disproportionately large heads, and large black almond-shaped eyes. The prototype for alien beings in countless abduction reports.
+                </div>
+                <div class="race-links">
+                    <a href="https://en.wikipedia.org/wiki/Grey_alien" class="link-btn" target="_blank">Wikipedia</a>
+                    <a href="https://hangar1publishing.com/blogs/ufos-uaps-and-aliens/zeta-reticuli" class="link-btn" target="_blank">Research</a>
+                    <button class="link-btn" onclick="event.stopPropagation(); openModal('greys')">View Details</button>
+                </div>
+            </div>
+            
+            <!-- Reptilians -->
+            <div class="race-card" onclick="openModal('reptilians')">
+                <div class="race-title">
+                    <span class="status-indicator complete"></span>
+                    Reptilians/Reptiloids
+                </div>
+                <div class="race-origin">Origin: Draco/Orion Systems</div>
+                <div class="race-description">
+                    Shapeshifting reptilian aliens that allegedly control Earth by taking human form and manipulating global politics and financial institutions.
+                </div>
+                <div class="race-links">
+                    <a href="https://en.wikipedia.org/wiki/Reptilian_conspiracy_theory" class="link-btn" target="_blank">Wikipedia</a>
+                    <a href="https://www.davidicke.com/" class="link-btn" target="_blank">David Icke</a>
+                    <button class="link-btn" onclick="event.stopPropagation(); openModal('reptilians')">View Details</button>
+                </div>
+            </div>
+            
+            <!-- Pleiadians -->
+            <div class="race-card" onclick="openModal('pleiadians')">
+                <div class="race-title">
+                    <span class="status-indicator complete"></span>
+                    Pleiadians/Nordics
+                </div>
+                <div class="race-origin">Origin: Pleiades Star Cluster</div>
+                <div class="race-description">
+                    Multi-dimensional beings described as highly evolved, benevolent entities focused on spiritual evolution and consciousness expansion.
+                </div>
+                <div class="race-links">
+                    <a href="https://www.pleiadians.com/" class="link-btn" target="_blank">Barbara Marciniak</a>
+                    <a href="https://danielscranton.com/" class="link-btn" target="_blank">Daniel Scranton</a>
+                    <button class="link-btn" onclick="event.stopPropagation(); openModal('pleiadians')">View Details</button>
+                </div>
+            </div>
+            
+            <!-- Arcturians -->
+            <div class="race-card" onclick="openModal('arcturians')">
+                <div class="race-title">
+                    <span class="status-indicator in-progress"></span>
+                    Arcturians
+                </div>
+                <div class="race-origin">Origin: Arcturus Star System</div>
+                <div class="race-description">
+                    Highly advanced extraterrestrial civilization described as other-dimensional, advanced star beings focused on healing and raising Earth's vibrational energy.
+                </div>
+                <div class="race-links">
+                    <button class="link-btn" onclick="event.stopPropagation(); openModal('arcturians')">View Details</button>
+                </div>
+            </div>
+            
+            <!-- Anunnaki -->
+            <div class="race-card" onclick="openModal('anunnaki')">
+                <div class="race-title">
+                    <span class="status-indicator in-progress"></span>
+                    Anunnaki
+                </div>
+                <div class="race-origin">Origin: Nibiru/Planet X</div>
+                <div class="race-description">
+                    Ancient astronaut beings from Sumerian mythology, alleged to have genetically modified early humans and established early civilizations.
+                </div>
+                <div class="race-links">
+                    <button class="link-btn" onclick="event.stopPropagation(); openModal('anunnaki')">View Details</button>
+                </div>
+            </div>
+            
+            <!-- Andromedans -->
+            <div class="race-card" onclick="openModal('andromedans')">
+                <div class="race-title">
+                    <span class="status-indicator in-progress"></span>
+                    Andromedans
+                </div>
+                <div class="race-origin">Origin: Andromeda Galaxy</div>
+                <div class="race-description">
+                    Benevolent beings from the Andromeda Galaxy focused on helping humanity's spiritual evolution and planetary healing.
+                </div>
+                <div class="race-links">
+                    <button class="link-btn" onclick="event.stopPropagation(); openModal('andromedans')">View Details</button>
+                </div>
+            </div>
+            
+            <!-- Sirians -->
+            <div class="race-card" onclick="openModal('sirians')">
+                <div class="race-title">
+                    <span class="status-indicator in-progress"></span>
+                    Sirians
+                </div>
+                <div class="race-origin">Origin: Sirius Star System</div>
+                <div class="race-description">
+                    Advanced beings from the Sirius star system, often associated with ancient Egyptian knowledge and spiritual wisdom.
+                </div>
+                <div class="race-links">
+                    <button class="link-btn" onclick="event.stopPropagation(); openModal('sirians')">View Details</button>
+                </div>
+            </div>
+            
+            <!-- Additional races grid continues... -->
+            <div class="race-card" onclick="openModal('lyrans')">
+                <div class="race-title">
+                    <span class="status-indicator pending"></span>
+                    Lyrans
+                </div>
+                <div class="race-origin">Origin: Lyra Constellation</div>
+                <div class="race-description">
+                    Considered by some as the original human ancestors, ancient beings from the Lyra constellation.
+                </div>
+                <div class="race-links">
+                    <button class="link-btn" onclick="event.stopPropagation(); openModal('lyrans')">View Details</button>
+                </div>
+            </div>
+            
+            <div class="race-card" onclick="openModal('draconians')">
+                <div class="race-title">
+                    <span class="status-indicator pending"></span>
+                    Draconians
+                </div>
+                <div class="race-origin">Origin: Draco Constellation</div>
+                <div class="race-description">
+                    Reptilian subspecies from the Draco constellation, often described as hierarchical and militaristic.
+                </div>
+                <div class="race-links">
+                    <button class="link-btn" onclick="event.stopPropagation(); openModal('draconians')">View Details</button>
+                </div>
+            </div>
+            
+            <div class="race-card" onclick="openModal('mantids')">
+                <div class="race-title">
+                    <span class="status-indicator pending"></span>
+                    Mantids/Insectoids
+                </div>
+                <div class="race-origin">Origin: Various Systems</div>
+                <div class="race-description">
+                    Insect-like beings often reported in abduction cases, described as having mantis-like characteristics.
+                </div>
+                <div class="race-links">
+                    <button class="link-btn" onclick="event.stopPropagation(); openModal('mantids')">View Details</button>
+                </div>
+            </div>
+            
+            <div class="race-card" onclick="openModal('yahyel')">
+                <div class="race-title">
+                    <span class="status-indicator pending"></span>
+                    Yahyel
+                </div>
+                <div class="race-origin">Origin: Hybrid Collective</div>
+                <div class="race-description">
+                    Hybrid beings described as first contact candidates, taking gradual approach to revealing themselves to humanity.
+                </div>
+                <div class="race-links">
+                    <button class="link-btn" onclick="event.stopPropagation(); openModal('yahyel')">View Details</button>
+                </div>
+            </div>
+            
+            <div class="race-card" onclick="openModal('tallwhites')">
+                <div class="race-title">
+                    <span class="status-indicator pending"></span>
+                    Tall Whites
+                </div>
+                <div class="race-origin">Origin: Unknown</div>
+                <div class="race-description">
+                    Human-like tall beings with pale white skin, allegedly involved in military cooperation programs.
+                </div>
+                <div class="race-links">
+                    <button class="link-btn" onclick="event.stopPropagation(); openModal('tallwhites')">View Details</button>
+                </div>
+            </div>
+            
+            <div class="race-card" onclick="openModal('blueavians')">
+                <div class="race-title">
+                    <span class="status-indicator pending"></span>
+                    Blue Avians
+                </div>
+                <div class="race-origin">Origin: Higher Dimensions</div>
+                <div class="race-description">
+                    Bird-like humanoids from higher dimensions, associated with spiritual guidance and consciousness expansion.
+                </div>
+                <div class="race-links">
+                    <button class="link-btn" onclick="event.stopPropagation(); openModal('blueavians')">View Details</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal for detailed race information -->
+    <div id="raceModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modalContent">
+                <!-- Dynamic content will be loaded here -->
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Race data object
+        const raceData = {
+            greys: {
+                title: "The Greys",
+                origin: "Zeta Reticuli Star System (Planet Serpo or ZR 3)",
+                description: "Small, humanoid bodies, smooth, grey skin, disproportionately large, hairless heads, and large, black, almond-shaped eyes. These entities became the prototype for alien beings in countless abduction reports.",
+                keyFeatures: [
+                    "Small humanoid bodies (3-4 feet tall)",
+                    "Large black almond-shaped eyes",
+                    "Smooth grey skin",
+                    "Telepathic communication",
+                    "Advanced technology"
+                ],
+                references: [
+                    { name: "Wikipedia - Grey Alien", url: "https://en.wikipedia.org/wiki/Grey_alien" },
+                    { name: "Zeta Reticuli Research", url: "https://hangar1publishing.com/blogs/ufos-uaps-and-aliens/zeta-reticuli" },
+                    { name: "Alien Wiki Database", url: "https://extraterrestrials.fandom.com/wiki/Zeta" }
+                ],
+                keyFigures: ["Betty & Barney Hill", "Marjorie Fish", "John G. Fuller"],
+                historicalCases: ["Hill Abduction (1961)", "Roswell UFO (1947)", "Betty Hill Star Map (1969)"]
+            },
+            reptilians: {
+                title: "Reptilians/Reptiloids",
+                origin: "Draco/Orion Star Systems",
+                description: "Shapeshifting reptilian aliens that allegedly control Earth by taking on human form and gaining political power to manipulate human societies.",
+                keyFeatures: [
+                    "Shapeshifting abilities",
+                    "Reptilian characteristics",
+                    "Alleged political control",
+                    "Inter-dimensional origins",
+                    "Connection to secret societies"
+                ],
+                references: [
+                    { name: "Wikipedia - Reptilian Conspiracy", url: "https://en.wikipedia.org/wiki/Reptilian_conspiracy_theory" },
+                    { name: "David Icke Official", url: "https://www.davidicke.com/" },
+                    { name: "Gaia - Reptilian Analysis", url: "https://www.gaia.com/article/david-ickes-famous-reptilians-conspiracy-do-they-walk-among-us" }
+                ],
+                keyFigures: ["David Icke", "Arizona Wilder", "Credo Mutwa"],
+                historicalCases: ["Political infiltration claims", "Secret society connections", "Bloodline theories"]
+            },
+            pleiadians: {
+                title: "Pleiadians/Nordics",
+                origin: "Pleiades Star Cluster",
+                description: "Multi-dimensional beings described as highly evolved, benevolent entities focused on spiritual evolution and consciousness expansion.",
+                keyFeatures: [
+                    "Highly evolved consciousness",
+                    "Spiritual teachers",
+                    "Benevolent intentions",
+                    "Multi-dimensional existence",
+                    "Focus on human evolution"
+                ],
+                references: [
+                    { name: "Barbara Marciniak Official", url: "https://www.pleiadians.com/" },
+                    { name: "Daniel Scranton Channeling", url: "https://danielscranton.com/" },
+                    { name: "Inner Traditions Publications", url: "https://www.innertraditions.com/author/barbara-marciniak/" }
+                ],
+                keyFigures: ["Barbara Marciniak", "Daniel Scranton", "Christine Day"],
+                historicalCases: ["Bringers of the Dawn channeling", "Pleiadian Times journal", "Modern channeling sessions"]
+            }
+        };
+        
+        function searchRaces() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const raceCards = document.querySelectorAll('.race-card');
+            
+            raceCards.forEach(card => {
+                const title = card.querySelector('.race-title').textContent.toLowerCase();
+                const description = card.querySelector('.race-description').textContent.toLowerCase();
+                const origin = card.querySelector('.race-origin').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || description.includes(searchTerm) || origin.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+        
+        function openModal(raceKey) {
+            const modal = document.getElementById('raceModal');
+            const modalContent = document.getElementById('modalContent');
+            const race = raceData[raceKey];
+            
+            if (race) {
+                modalContent.innerHTML = `
+                    <h2 style="color: #64ffda; margin-bottom: 20px;">${race.title}</h2>
+                    <p style="color: #9c27b0; font-style: italic; margin-bottom: 15px;"><strong>Origin:</strong> ${race.origin}</p>
+                    <p style="margin-bottom: 20px; line-height: 1.6;">${race.description}</p>
+                    
+                    <h3 style="color: #64ffda; margin: 20px 0 10px 0;">Key Features:</h3>
+                    <ul style="margin-bottom: 20px;">
+                        ${race.keyFeatures.map(feature => `<li style="margin-bottom: 5px;">${feature}</li>`).join('')}
+                    </ul>
+                    
+                    <h3 style="color: #64ffda; margin: 20px 0 10px 0;">References:</h3>
+                    <div style="margin-bottom: 20px;">
+                        ${race.references.map(ref => `<a href="${ref.url}" target="_blank" class="link-btn" style="margin: 5px;">${ref.name}</a>`).join('')}
+                    </div>
+                    
+                    <h3 style="color: #64ffda; margin: 20px 0 10px 0;">Key Figures:</h3>
+                    <p style="margin-bottom: 20px;">${race.keyFigures.join(', ')}</p>
+                    
+                    <h3 style="color: #64ffda; margin: 20px 0 10px 0;">Historical Cases:</h3>
+                    <ul>
+                        ${race.historicalCases.map(case_item => `<li style="margin-bottom: 5px;">${case_item}</li>`).join('')}
+                    </ul>
+                `;
+            } else {
+                modalContent.innerHTML = `
+                    <h2 style="color: #64ffda; margin-bottom: 20px;">Race Information</h2>
+                    <p>Detailed information for this race is currently being researched and will be available soon.</p>
+                    <p style="margin-top: 20px; opacity: 0.7;">Status: Research in Progress</p>
+                `;
+            }
+            
+            modal.style.display = 'block';
+        }
+        
+        function closeModal() {
+            document.getElementById('raceModal').style.display = 'none';
+        }
+        
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById('raceModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Alien Races Index loaded successfully');
+        });
+    </script>
+</body>
+</html>
